@@ -1,13 +1,9 @@
-const expFormatter = (exp) => {
-  let count = 0;
-  const lastIndexFunc = exp.indexOf(" ");
-  const isAdd = exp.slice(1, lastIndexFunc) === "add";
-
-  let i = lastIndexFunc + 1;
-  let start = i;
-
+const get2Expression = (exp) => {
   let first = null;
   let second = null;
+  let i = 0;
+  let start = 0;
+  let count = 0;
 
   if (exp[i] === "(") {
     count++;
@@ -34,6 +30,15 @@ const expFormatter = (exp) => {
   } else {
     second = parseInt(exp.slice(i, -1));
   }
+
+  return { first, second };
+};
+
+const expFormatter = (exp) => {
+  const lastIndexFunc = exp.indexOf(" ");
+  const isAdd = exp.slice(1, lastIndexFunc) === "add";
+
+  const { first, second } = get2Expression(exp.slice(lastIndexFunc + 1));
 
   return isAdd ? first + second : first * second;
 };
