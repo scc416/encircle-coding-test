@@ -29,7 +29,7 @@ const get2Exp = (exp) => {
   };
 };
 
-const expFormatter = (exp) => {
+const getExpAnswer = (exp) => {
   const lastIndexFunc = exp.indexOf(" ");
   const isAdd = exp.slice(1, lastIndexFunc) === "add";
 
@@ -40,7 +40,7 @@ const expFormatter = (exp) => {
 
 const getResult = (exp) => {
   if (exp[0] !== "(") return parseInt(exp);
-  return expFormatter(exp);
+  return getExpAnswer(exp);
 };
 
 const { argv } = process;
