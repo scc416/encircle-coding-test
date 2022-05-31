@@ -1,46 +1,41 @@
-const get2Expression = (exp) => {
-  let first = null;
-  let second = null;
-  let i = 0;
-  let start = 0;
-  let count = 0;
+const get2Exp = (exp) => {
 
-  if (exp[i] === "(") {
-    count++;
-    for (let j = i + 1; j < exp.length; j++) {
+  // i is the index that seperate the 2 expression/integer
+  let i = 0;
+
+  if (exp[i] !== "(") {
+    // the first expression is an integer
+    i = exp.indexOf(" ");
+  } else if (exp[exp.length - 1] !== ")") {
+    // the second expression is an integer
+    const words = exp.split(" ");
+    i = exp.length - words[words.length - 1].length - 1;
+  } else {
+    // both expression are not an integer
+    let count = 1;
+    for (let j = i + 1; j < exp.length && count; j++) {
       const c = exp[j];
       if (c === "(") count++;
       if (c === ")") {
         count--;
-        if (!count) {
-          first = expFormatter(exp.slice(i, j + 1));
-          i = j + 2;
-          j = exp.length;
-        }
+        if (!count) i = j + 2;
       }
     }
-  } else {
-    const end = exp.slice(start).indexOf(" ");
-    first = parseInt(exp.slice(start, start + end));
-    i = start + end + 1;
   }
 
-  if (exp[i] === "(") {
-    second = expFormatter(exp.slice(i, -1));
-  } else {
-    second = parseInt(exp.slice(i, -1));
-  }
-
-  return { first, second };
+  return {
+    num1: getResult(exp.slice(0, i)),
+    num2: getResult(exp.slice(i + 1)),
+  };
 };
 
 const expFormatter = (exp) => {
   const lastIndexFunc = exp.indexOf(" ");
   const isAdd = exp.slice(1, lastIndexFunc) === "add";
 
-  const { first, second } = get2Expression(exp.slice(lastIndexFunc + 1));
+  const { num1, num2 } = get2Exp(exp.slice(lastIndexFunc + 1, -1));
 
-  return isAdd ? first + second : first * second;
+  return isAdd ? num1 + num2 : num1 * num2;
 };
 
 const getResult = (exp) => {
